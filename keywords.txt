@@ -1,0 +1,26 @@
+#######################################
+# GFPCF8574 - Geek Factory PCF8574 Library
+# Syntax Coloring Map
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+GFPCF8574	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+pinMode	KEYWORD2
+digitalWrite	KEYWORD2
+digitalRead	KEYWORD2
+readPort	KEYWORD2
+writePort	KEYWORD2
+getAddress	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################

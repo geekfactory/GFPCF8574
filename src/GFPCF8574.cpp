@@ -21,14 +21,12 @@
 #include "GFPCF8574.h"
 
 GFPCF8574::GFPCF8574(uint8_t address, TwoWire &wire)
-    : _address(address), _wire(wire) {}
+    : _address(address), _wire(wire), _inputMask(0xFF), _outputLatch(0xFF) {}
 
 bool GFPCF8574::begin(bool initWire)
 {
 	if (initWire)
 		_wire.begin();
-	_outputLatch = 0xFF; // Release all pins; they can be used as inputs.
-	_inputMask = 0xFF;
 	return writeRegister();
 }
 
@@ -40,17 +38,11 @@ bool GFPCF8574::pinMode(uint8_t pin, uint8_t mode)
 	const uint8_t mask = static_cast<uint8_t>(1U << pin);
 
 	if (mode == INPUT || mode == INPUT_PULLUP)
-	{
 		_inputMask |= mask;
-	}
 	else if (mode == OUTPUT)
-	{
 		_inputMask &= static_cast<uint8_t>(~mask);
-	}
 	else
-	{
 		return false; // Invalid mode
-	}
 
 	return writeRegister();
 }
@@ -79,21 +71,15 @@ bool GFPCF8574::digitalRead(uint8_t pin, bool &value)
 	if (!readPort(portValue))
 		return false;
 
-	uint8_t mask = static_cast<uint8_t>(1U << pin);
-	value = (portValue & mask) ? true : false;
+	const uint8_t mask = static_cast<uint8_t>(1U << pin);
+	value = (portValue & mask) != 0;
 	return true;
 }
 
 bool GFPCF8574::writePort(uint8_t value)
 {
-	const uint8_t previous = _outputLatch;
 	_outputLatch = value;
-
-	if (writeRegister())
-		return true;
-
-	_outputLatch = previous;
-	return false;
+	return writeRegister();
 }
 
 bool GFPCF8574::readPort(uint8_t &value)
