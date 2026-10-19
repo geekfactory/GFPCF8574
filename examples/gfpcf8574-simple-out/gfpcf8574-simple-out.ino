@@ -20,12 +20,16 @@
 
 #include <GFPCF8574.h>
 
+// Create a GFPCF8574 instance with I2C address (0x20) and the default Wire interface
 GFPCF8574 io(0x20);
 
 void setup()
 {
+	// initialize the I2C bus
 	Wire.begin();
+	// initialize the PCF8574 device
 	io.begin();
+	// configure pin 7 as output (LED)
 	io.pinMode(7, OUTPUT);
 }
 
